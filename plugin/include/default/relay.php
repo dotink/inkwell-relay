@@ -17,9 +17,9 @@
 		}
 
 		$relay_resolver = new Inkwell\Relay\Resolver($broker);
-		$relay_runner   = new Runner($relay_queue, $relay_resolver);
+		$relay_runner   = new Relay\Runner($relay_queue, $relay_resolver);
 
 		$app['engine.handler'] = function($app, $broker) use ($relay_runner){
-			return $app['gateway']->transport($relay_runner($app['request'], $app['response]']));
+			return $app['gateway']->transport($relay_runner($app['request'], $app['response']));
 		};
 	});
