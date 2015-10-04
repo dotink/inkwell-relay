@@ -1,5 +1,6 @@
 <?php
 
+	use Dotink\Flourish;
 	use Psr\Http\Message\RequestInterface;
 	use Psr\Http\Message\ResponseInterface;
 
@@ -9,11 +10,15 @@
 		$relay_queue = array();
 
 		foreach ($app['engine']->fetch('@middleware', 'providers') as $id => $providers) {
+			if (!is_array($providers)) {
+				throw new Flourish\ProgrammerException('Invalid providers type, not an array');
+			}
 
+			$relay_queue += $providers;
 		}
 
 		if (isset($app['router'])) {
-			$relay_queue[]  = [$app['router'], 'run'];
+			$relay_queue[] = [$app['router'], 'run'];
 		}
 
 		$relay_resolver = new Inkwell\Relay\Resolver($broker);
